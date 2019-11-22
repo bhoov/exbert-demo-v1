@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>exBERT</title>
+<meta name="author" content="(Ben Hoover)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/css/theme/league.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'https://cdn.jsdelivr.net/npm/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+<meta name="description" content="Intro to exBert">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1>exBERT</h1><h4>Explorable and Explainable Transformers</h4><hr><p><small>Ben Hoover</small></p><small><a href="mailto:benjamin.hoover@ibm.com">benjamin.hoover@ibm.com</a></small><p><small>2019-11-22</small></p>
+</section>
+<section id="table-of-contents">
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#/slide-org8e6618d">Language Modeling</a></li>
+<li><a href="#/slide-orgd0c617e">Transformers</a></li>
+<li><a href="#/slide-orgd29e001">Walkthrough</a></li>
+<li><a href="#/slide-org882eaa2">The Engineering Stack</a></li>
+</ul>
+</div>
+</div>
+</section>
+
+<section>
+<section id="slide-org8e6618d">
+<h2 id="org8e6618d">Language Modeling</h2>
+<ul>
+<li class="fragment appear">ngrams</li>
+<li class="fragment appear">seq2seq (RNN / LSTM)</li>
+<li class="fragment appear">Transformer</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgfb0e3e0">
+<h3 id="orgfb0e3e0">ngrams</h3>
+<img src="./img/ngrams.png" alt="Ngrams" style="background-color:white;">
+<small>http://recognize-speech.com/language-model/n-gram-model/comparison</small>
+
+</section>
+</section>
+<section>
+<section id="slide-org40c2600">
+<h3 id="org40c2600">skipgrams</h3>
+<img width=750px src="./img/skipgram.png" alt="Ngrams" style="background-color:white;">
+
+<small>https://towardsdatascience.com/skip-gram-nlp-context-words-prediction-algorithm-5bbf34f84e0c</small>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb1a53c6">
+<h3 id="orgb1a53c6">seq2seq encoder</h3>
+<img width=600px src="./img/seq2seq-encoder.png" alt="seq2seq-encoder" style="background-color:white;">
+<small>http://www.realworldnlpbook.com/blog/building-seq2seq-machine-translation-models-using-allennlp.html</small>
+
+</section>
+</section>
+<section>
+<section id="slide-orgba54ac7">
+<h3 id="orgba54ac7">seq2seq decoder</h3>
+<img width=600px src="./img/seq2seq-decoder.png" alt="seq2seq-decoder" style="background-color:white;">
+<small>http://www.realworldnlpbook.com/blog/building-seq2seq-machine-translation-models-using-allennlp.html</small>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd0c617e">
+<h2 id="orgd0c617e">Transformers</h2>
+<div class="outline-text-2" id="text-orgd0c617e">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org22a59aa">
+<h3 id="org22a59aa">Attention</h3>
+<img width=500px src="./img/transformer_self_attention.png" alt="transformer-selfatt" style="background-color:white;">
+<small>http://jalammar.github.io/illustrated-transformer/</small>
+
+</section>
+</section>
+<section>
+<section id="slide-org0464274">
+<h3 id="org0464274">Multi-Heads</h3>
+<img width=500px src="./img/transformer_sa+heads.png" alt="transformer-selfatt+heads" style="background-color:white;">
+<small>http://jalammar.github.io/illustrated-transformer/</small>
+
+</section>
+</section>
+<section>
+<section id="slide-orgf6ae037">
+<h3 id="orgf6ae037">Important Terminology</h3>
+<ul>
+<li class="fragment fade-in-semi-out"><b>TOKEN</b>:   Word, punctuation, part of word, &#x2026;</li>
+
+<li class="fragment fade-in-semi-out"><b>EMBEDDING</b> :   High dim vector representing each token ("representations")</li>
+
+<li class="fragment fade-in-semi-out"><b>CONTEXT</b> :  Summary of all past embeddings of all tokens (represents the model understanding of the context)</li>
+
+<li class="fragment fade-in-semi-out"><b>ATTENTION</b> :  Probability weighting the importance of other tokens</li>
+
+<li class="fragment fade-in-semi-out"><b>HEAD(s)</b> :  Uses attention to calculate context</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org3557788">
+<h3 id="org3557788">Types of Transformers</h3>
+<p>
+2 different kinds of transformer models:
+</p>
+
+<ul>
+<li>Bidirectional (BERT)</li>
+<li>Autoregressive (GPT2)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org1cb6682">
+<h3 id="org1cb6682">BertVIZ</h3>
+<img width=800px src="./img/bertviz-attention.gif" alt="bertviz_gif" style="background-color:white;">
+<small>https://github.com/jessevig/bertviz</small>
+</section>
+</section>
+<section>
+<section id="slide-org412c5db">
+<h3 id="org412c5db">Papers</h3>
+<p>
+<a href="https://github.com/tomohideshibata/BERT-related-papers">https://github.com/tomohideshibata/BERT-related-papers</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd29e001">
+<h2 id="orgd29e001">Walkthrough</h2>
+<p>
+<a href="http://exbert.net">http://exbert.net</a>
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org882eaa2">
+<h2 id="org882eaa2">The Engineering Stack</h2>
+<div class="outline-text-2" id="text-org882eaa2">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgd92a919">
+<h3 id="orgd92a919">Architecture</h3>
+<ul>
+<li>Python Backend with Connexion</li>
+<li>Typescript Frontend with D3</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org0b67e30">
+<h3 id="org0b67e30">Connexion</h3>
+<ul>
+<li>A Flask wrapper</li>
+<li>Define API in <code>.yaml</code> file</li>
+
+</ul>
+
+<img width=800px src="./img/swagger_file.png" alt="swagger_file" style="background-color:white;">
+<small>https://github.com/zalando/connexion</small>
+
+</section>
+</section>
+<section>
+<section id="slide-org2e4b208">
+<h3 id="org2e4b208">Connexion UI</h3>
+<img width=800px src="./img/swagger_ui.png" alt="swagger_ui" style="background-color:white;">
+<small>https://swagger.io/tools/swagger-ui/</small>
+
+</section>
+</section>
+<section>
+<section id="slide-org8af779a">
+<h3 id="org8af779a">Python Tools</h3>
+<ul>
+<li class="fragment fade-in-semi-out">Pytorch (<a href="https://pytorch.org/">https://pytorch.org/</a>)</li>
+<li class="fragment fade-in-semi-out">Huggingface (<a href="https://github.com/huggingface">https://github.com/huggingface</a>)</li>
+<li class="fragment fade-in-semi-out">SpaCy (<a href="https://spacy.io/">https://spacy.io/</a>)</li>
+<li class="fragment fade-in-semi-out">Faiss (<a href="https://github.com/facebookresearch/faiss">https://github.com/facebookresearch/faiss</a>)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orga89186e">
+<h3 id="orga89186e">Frontend</h3>
+<ul>
+<li class="fragment fade-in-semi-out">Typescript (<a href="https://www.typescriptlang.org/">https://www.typescriptlang.org/</a>)</li>
+<li class="fragment fade-in-semi-out">D3 (<a href="https://d3js.org/">https://d3js.org/</a>)</li>
+<li class="fragment fade-in-semi-out">Raw HTML + CSS</li>
+<li class="fragment fade-in-semi-out">State stored in URI</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org8488881">
+<h3 id="org8488881">Hardware resources</h3>
+<ul>
+<li>GPUs available, running on CPU for inference (both pytorch and faiss)</li>
+<li>NGINX (<a href="https://www.nginx.com/">https://www.nginx.com/</a>)</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orga9730f6">
+<h3 id="orga9730f6">This presentation</h3>
+<dl>
+<dt>Reveal.js</dt><dd><a href="https://revealjs.com/#/">https://revealjs.com/#/</a></dd>
+<dt>Emacs</dt><dd><a href="https://www.gnu.org/software/emacs/">https://www.gnu.org/software/emacs/</a></dd>
+<dt>org-reveal</dt><dd><a href="https://github.com/yjwen/org-reveal">https://github.com/yjwen/org-reveal</a></dd>
+
+</dl>
+
+</section>
+</section>
+<section>
+<section id="slide-orgdb457de">
+<h3 id="orgdb457de">Credits</h3>
+<ul>
+<li>Hendrik Strobelt (hendrik.strobelt@ibm.com)</li>
+<li>Sebastian Gehrmann (gehrmann@g.harvard.edu)</li>
+
+</ul>
+
+<small style="margin-top:100px;"><hr><p>Ben Hoover</p><p>benjamin.hoover@ibm.com</p></small>
+</section>
+</section>
+</div>
+</div>
+<p> Created by Ben Hoover </p>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+transition:'fade',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

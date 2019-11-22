@@ -1,0 +1,124 @@
+#+TITLE: exBERT
+#+SUBTITLE: Explorable and Explainable Transformers
+#+DATE: {{{time(%Y-%m-%d)}}}
+#+AUTHOR: Ben Hoover
+#+EMAIL: benjamin.hoover@ibm.com
+
+#+OPTIONS: num:nil toc:1 reveal_title_slide:"<h1>%t</h1><h4>%s</h4><hr><p><small>%a</small></p><small>%e</small><p><small>%d</small></p>"
+#+REVEAL_INIT_OPTIONS: transition:'fade'
+#+REVEAL_THEME: league
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Intro to exBert">
+#+REVEAL_POSTAMBLE: <p> Created by Ben Hoover </p>
+#+REVEAL_PLUGINS: (markdown notes)
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+
+#+MACRO: color @@html:<font color="$1">$2</font>@@
+
+* Language Modeling
+#+ATTR_REVEAL: :frag (appear)
+- ngrams
+- seq2seq (RNN / LSTM)
+- Transformer
+  
+** ngrams
+#+REVEAL_HTML: <img src="./img/ngrams.png" alt="Ngrams" style="background-color:white;">
+#+REVEAL_HTML: <small>http://recognize-speech.com/language-model/n-gram-model/comparison</small>
+
+** skipgrams
+#+REVEAL_HTML: <img width=750px src="./img/skipgram.png" alt="Ngrams" style="background-color:white;">
+
+#+REVEAL_HTML: <small>https://towardsdatascience.com/skip-gram-nlp-context-words-prediction-algorithm-5bbf34f84e0c</small>
+
+** seq2seq encoder
+#+REVEAL_HTML: <img width=600px src="./img/seq2seq-encoder.png" alt="seq2seq-encoder" style="background-color:white;">
+#+REVEAL_HTML: <small>http://www.realworldnlpbook.com/blog/building-seq2seq-machine-translation-models-using-allennlp.html</small>
+
+** seq2seq decoder
+#+REVEAL_HTML: <img width=600px src="./img/seq2seq-decoder.png" alt="seq2seq-decoder" style="background-color:white;">
+#+REVEAL_HTML: <small>http://www.realworldnlpbook.com/blog/building-seq2seq-machine-translation-models-using-allennlp.html</small>
+
+* Transformers
+** Attention
+#+REVEAL_HTML: <img width=500px src="./img/transformer_self_attention.png" alt="transformer-selfatt" style="background-color:white;">
+#+REVEAL_HTML: <small>http://jalammar.github.io/illustrated-transformer/</small>
+
+** Multi-Heads
+#+REVEAL_HTML: <img width=500px src="./img/transformer_sa+heads.png" alt="transformer-selfatt+heads" style="background-color:white;">
+#+REVEAL_HTML: <small>http://jalammar.github.io/illustrated-transformer/</small>
+
+** Important Terminology
+#+ATTR_REVEAL: :frag (fade-in-semi-out)
+-  *TOKEN*:   Word, punctuation, part of word, ...
+
+-  *EMBEDDING* :   High dim vector representing each token ("representations")
+
+-  *CONTEXT* :  Summary of all past embeddings of all tokens (represents the model understanding of the context)
+
+-  *ATTENTION* :  Probability weighting the importance of other tokens
+
+-  *HEAD(s)* :  Uses attention to calculate context
+
+** Types of Transformers
+
+ 2 different kinds of transformer models:
+
+ - Bidirectional (BERT)
+ - Autoregressive (GPT2)
+
+** BertVIZ
+#+REVEAL_HTML: <img width=800px src="./img/bertviz-attention.gif" alt="bertviz_gif" style="background-color:white;">
+#+REVEAL_HTML: <small>https://github.com/jessevig/bertviz</small>
+** Papers
+
+ https://github.com/tomohideshibata/BERT-related-papers
+
+* Walkthrough
+
+http://exbert.net
+
+* The Engineering Stack
+** Architecture
+- Python Backend with Connexion
+- Typescript Frontend with D3
+
+** Connexion
+- A Flask wrapper
+- Define API in =.yaml= file
+
+#+REVEAL_HTML: <img width=800px src="./img/swagger_file.png" alt="swagger_file" style="background-color:white;">
+#+REVEAL_HTML: <small>https://github.com/zalando/connexion</small>
+
+** Connexion UI
+#+REVEAL_HTML: <img width=800px src="./img/swagger_ui.png" alt="swagger_ui" style="background-color:white;">
+#+REVEAL_HTML: <small>https://swagger.io/tools/swagger-ui/</small>
+
+** Python Tools
+#+ATTR_REVEAL: :frag (fade-in-semi-out)
+- Pytorch (https://pytorch.org/)
+- Huggingface (https://github.com/huggingface)
+- SpaCy (https://spacy.io/)
+- Faiss (https://github.com/facebookresearch/faiss)
+
+** Frontend
+#+ATTR_REVEAL: :frag (fade-in-semi-out)
+- Typescript (https://www.typescriptlang.org/)
+- D3 (https://d3js.org/)
+- Raw HTML + CSS
+- State stored in URI
+
+** Hardware resources
+- GPUs available, running on CPU for inference (both pytorch and faiss)
+- NGINX (https://www.nginx.com/)
+
+** This presentation
+- Reveal.js :: https://revealjs.com/#/
+- Emacs :: https://www.gnu.org/software/emacs/
+- org-reveal :: https://github.com/yjwen/org-reveal
+
+** Credits
+- Hendrik Strobelt (hendrik.strobelt@ibm.com)
+- Sebastian Gehrmann (gehrmann@g.harvard.edu)
+
+#+REVEAL_HTML: <small style="margin-top:100px;"><hr><p>Ben Hoover</p><p>benjamin.hoover@ibm.com</p></small>
+
